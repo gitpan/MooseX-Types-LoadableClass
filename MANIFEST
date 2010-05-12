@@ -15,9 +15,11 @@ MANIFEST			This list of files
 META.yml
 README
 t/00use.t
+t/all_imports.t
 t/author/eol.t
 t/author/notabs.t
 t/author/pod-coverage.t
 t/author/pod.t
 t/basic.t
 t/lib/FooBarTestClass.pm
+t/typemap.t
