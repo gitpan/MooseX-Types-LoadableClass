@@ -25,4 +25,4 @@ requires:
 resources:
   license: http://dev.perl.org/licenses/
   repository: git://github.com/bobtfish/MooseX-Types-LoadableClass.git
-version: 0.003
+version: 0.004

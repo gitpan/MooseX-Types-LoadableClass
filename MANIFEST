@@ -22,4 +22,5 @@ t/author/pod-coverage.t
 t/author/pod.t
 t/basic.t
 t/lib/FooBarTestClass.pm
+t/lib/FooBarTestRole.pm
 t/typemap.t
