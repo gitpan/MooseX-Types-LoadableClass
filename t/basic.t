@@ -1,10 +1,10 @@
 use strict;
 use warnings;
-use FindBin ();
-use lib $FindBin::Bin . '/lib';
+
+use lib 't/lib';
 
 use Test::More;
-use Class::MOP ();
+use Class::Load 'is_class_loaded';
 
 {
     package MyClass;
@@ -24,16 +24,16 @@ use Class::MOP ();
     );
 }
 
-ok !Class::MOP::is_class_loaded('FooBarTestClass');
+ok !is_class_loaded('FooBarTestClass');
 ok eval { MyClass->new(foobar_class => 'FooBarTestClass') };
-ok Class::MOP::is_class_loaded('FooBarTestClass');
+ok is_class_loaded('FooBarTestClass');
 
 ok !eval { MyClass->new(foobar_class => 'FooBarTestClassDoesNotExist') };
 ok $@;
 
-ok !Class::MOP::is_class_loaded('FooBarTestRole');
+ok !is_class_loaded('FooBarTestRole');
 ok eval { MyClass->new(foobar_role => 'FooBarTestRole') };
-ok Class::MOP::is_class_loaded('FooBarTestRole');
+ok is_class_loaded('FooBarTestRole');
 
 ok !eval { MyClass->new(foobar_role => 'FooBarTestClass') };
 ok $@;

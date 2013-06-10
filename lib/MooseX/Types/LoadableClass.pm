@@ -7,19 +7,23 @@ use Moose::Util::TypeConstraints;
 use Class::Load qw/ load_optional_class /;
 use namespace::clean -except => [qw/ import /];
 
-our $VERSION = '0.008';
+our $VERSION = '0.009';
 $VERSION = eval $VERSION;
 
-subtype LoadableClass, as MooseClassName;
-coerce LoadableClass, from Str,
-    via { my $name = $_; load_optional_class($name) ? $name : undef };
+subtype LoadableClass,
+    as Str,
+    where { load_optional_class($_) and MooseClassName->check($_) };
 
-subtype LoadableRole, as RoleName;
-# this is alright because ClassName is just is_class_loaded, with no
-# constraints on the metaclass
-coerce LoadableRole, from Str, via { to_LoadableClass($_) };
+subtype LoadableRole,
+    as Str,
+    where { load_optional_class($_) and RoleName->check($_) };
+
 
 # back compat
+coerce LoadableClass, from Str, via { $_ };
+
+coerce LoadableRole, from Str, via { $_ };
+
 __PACKAGE__->type_storage->{ClassName}
     = __PACKAGE__->type_storage->{LoadableClass};
 

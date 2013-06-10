@@ -25,4 +25,5 @@ t/clobber_dollerunderscore.t
 t/lib/ClobberDollarUnderscore.pm
 t/lib/FooBarTestClass.pm
 t/lib/FooBarTestRole.pm
+t/no_moose.t
 t/typemap.t
