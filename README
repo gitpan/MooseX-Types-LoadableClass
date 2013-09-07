@@ -1,47 +1,13 @@
-NAME
-    MooseX::Types::LoadableClass - ClassName type constraint with coercion
-    to load the class.
 
-SYNOPSIS
-        package MyClass;
-        use Moose;
-        use MooseX::Types::LoadableClass qw/ LoadableClass /;
 
-        has foobar_class => (
-            is => 'ro',
-            required => 1,
-            isa => LoadableClass,
-            coerce => 1,
-        );
+This archive contains the distribution MooseX-Types-LoadableClass,
+version 0.010:
 
-        MyClass->new(foobar_class => 'FooBar'); # FooBar.pm is loaded or an
-                                                # exception is thrown.
+  ClassName type constraint with coercion to load the class.
 
-DESCRIPTION
-        use Moose::Util::TypeConstraints;
+This software is copyright (c) 2010 by Infinity Interactive, Inc.
 
-        my $tc = subtype as ClassName;
-        coerce $tc, from Str, via { Class::MOP::load_class($_); $_ };
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
 
-    I've written those three lines of code quite a lot of times, in quite a
-    lot of places.
-
-    Now I don't have to.
-
-TYPES EXPORTED
-  LoadableClass
-    A normal class / package.
-
-  LoadableRole
-    Like "LoadableClass", except the loaded package must be a Moose::Role.
-
-AUTHORS
-    Tomas Doran (t0m) "<bobtfish@bobtfish.net>"
-
-    Florian Ragwitz (rafl) "<rafl@debian.org>"
-
-COPYRIGHT AND LICENSE
-    Copyright (c) 2010 the above named authors.
-
-    Licensed under the same terms as perl itself.
 

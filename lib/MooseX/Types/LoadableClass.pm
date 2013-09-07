@@ -1,22 +1,34 @@
 package MooseX::Types::LoadableClass;
+BEGIN {
+  $MooseX::Types::LoadableClass::AUTHORITY = 'cpan:BOBTFISH';
+}
+{
+  $MooseX::Types::LoadableClass::VERSION = '0.010';
+}
+# git description: v0.009-7-g884ae07
+
+# ABSTRACT: ClassName type constraint with coercion to load the class.
 use strict;
 use warnings;
 use MooseX::Types -declare => [qw/ ClassName LoadableClass LoadableRole /];
 use MooseX::Types::Moose qw(Str RoleName), ClassName => { -as => 'MooseClassName' };
 use Moose::Util::TypeConstraints;
-use Class::Load qw/ load_optional_class /;
-use namespace::clean -except => [qw/ import /];
-
-our $VERSION = '0.009';
-$VERSION = eval $VERSION;
+use Class::Load qw(is_class_loaded load_optional_class);
+use namespace::autoclean;
 
 subtype LoadableClass,
     as Str,
-    where { load_optional_class($_) and MooseClassName->check($_) };
+    where {
+        is_class_loaded($_) || load_optional_class($_)
+            and MooseClassName->check($_)
+    };
 
 subtype LoadableRole,
     as Str,
-    where { load_optional_class($_) and RoleName->check($_) };
+    where {
+        is_class_loaded($_) || load_optional_class($_)
+            and RoleName->check($_)
+    };
 
 
 # back compat
@@ -29,11 +41,23 @@ __PACKAGE__->type_storage->{ClassName}
 
 __PACKAGE__->meta->make_immutable;
 1;
+
 __END__
+
+=pod
+
+=encoding utf-8
+
+=for :stopwords Tomas Doran Florian Ragwitz Karen Etheridge Infinity Interactive, Inc
+ClassName
 
 =head1 NAME
 
 MooseX::Types::LoadableClass - ClassName type constraint with coercion to load the class.
+
+=head1 VERSION
+
+version 0.010
 
 =head1 SYNOPSIS
 
@@ -45,7 +69,6 @@ MooseX::Types::LoadableClass - ClassName type constraint with coercion to load t
         is => 'ro',
         required => 1,
         isa => LoadableClass,
-        coerce => 1,
     );
 
     MyClass->new(foobar_class => 'FooBar'); # FooBar.pm is loaded or an
@@ -56,7 +79,7 @@ MooseX::Types::LoadableClass - ClassName type constraint with coercion to load t
     use Moose::Util::TypeConstraints;
 
     my $tc = subtype as ClassName;
-    coerce $tc, from Str, via { Class::MOP::load_class($_); $_ };
+    coerce $tc, from Str, via { Class::Load::load_class($_); $_ };
 
 I've written those three lines of code quite a lot of times, in quite
 a lot of places.
@@ -65,25 +88,37 @@ Now I don't have to.
 
 =head1 TYPES EXPORTED
 
-=head2 LoadableClass
+=head2 C<LoadableClass>
 
 A normal class / package.
 
-=head2 LoadableRole
+=head2 C<LoadableRole>
 
 Like C<LoadableClass>, except the loaded package must be a L<Moose::Role>.
 
 =head1 AUTHORS
 
-Tomas Doran (t0m) C<< <bobtfish@bobtfish.net> >>
+=over 4
 
-Florian Ragwitz (rafl) C<< <rafl@debian.org> >>
+=item *
+
+Tomas Doran <bobtfish@bobtfish.net>
+
+=item *
+
+Florian Ragwitz <rafl@debian.org>
+
+=item *
+
+Karen Etheridge <ether@cpan.org>
+
+=back
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (c) 2010 the above named authors.
+This software is copyright (c) 2010 by Infinity Interactive, Inc.
 
-Licensed under the same terms as perl itself.
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
 
 =cut
-

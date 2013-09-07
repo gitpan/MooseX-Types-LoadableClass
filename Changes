@@ -1,3 +1,9 @@
+Revision history for MooseX-Types-LoadableClass
+
+0.010     2013-09-07 21:37:31Z (Karen Etheridge)
+  - avoid trying to load the class if already loaded (minor optimization)
+  - repository moved to the github moose organization
+
 0.009 2013-06-10
   - now performing type checking in the type check itself, not the coercion,
     to fix results when the type check fails (RT#86041, Karen Etheridge)
