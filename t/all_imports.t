@@ -1,7 +1,5 @@
 use strict;
 use warnings;
-use FindBin ();
-use lib $FindBin::Bin . '/lib';
 
 use Test::More;
 use Moose::Util::TypeConstraints;
@@ -19,4 +17,3 @@ foreach my $prefix ('is_', 'to_', '') {
 }
 
 done_testing;
-

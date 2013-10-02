@@ -3,9 +3,9 @@ BEGIN {
   $MooseX::Types::LoadableClass::AUTHORITY = 'cpan:BOBTFISH';
 }
 {
-  $MooseX::Types::LoadableClass::VERSION = '0.010';
+  $MooseX::Types::LoadableClass::VERSION = '0.011';
 }
-# git description: v0.009-7-g884ae07
+# git description: v0.010-9-g7dd9f6b
 
 # ABSTRACT: ClassName type constraint with coercion to load the class.
 use strict;
@@ -14,19 +14,22 @@ use MooseX::Types -declare => [qw/ ClassName LoadableClass LoadableRole /];
 use MooseX::Types::Moose qw(Str RoleName), ClassName => { -as => 'MooseClassName' };
 use Moose::Util::TypeConstraints;
 use Class::Load qw(is_class_loaded load_optional_class);
+use Module::Runtime qw(is_module_name);
 use namespace::autoclean;
 
 subtype LoadableClass,
     as Str,
     where {
-        is_class_loaded($_) || load_optional_class($_)
+        is_module_name($_)
+            and is_class_loaded($_) || load_optional_class($_)
             and MooseClassName->check($_)
     };
 
 subtype LoadableRole,
     as Str,
     where {
-        is_class_loaded($_) || load_optional_class($_)
+        is_module_name($_)
+            and is_class_loaded($_) || load_optional_class($_)
             and RoleName->check($_)
     };
 
@@ -46,10 +49,10 @@ __END__
 
 =pod
 
-=encoding utf-8
+=encoding ISO-8859-1
 
-=for :stopwords Tomas Doran Florian Ragwitz Karen Etheridge Infinity Interactive, Inc
-ClassName
+=for :stopwords Tomas Doran Infinity Interactive, Inc Dagfinn Ilmari Mannsåker Florian
+Ragwitz Karen Etheridge ClassName
 
 =head1 NAME
 
@@ -57,7 +60,7 @@ MooseX::Types::LoadableClass - ClassName type constraint with coercion to load t
 
 =head1 VERSION
 
-version 0.010
+version 0.011
 
 =head1 SYNOPSIS
 
@@ -96,13 +99,24 @@ A normal class / package.
 
 Like C<LoadableClass>, except the loaded package must be a L<Moose::Role>.
 
-=head1 AUTHORS
+=head1 AUTHOR
+
+Tomas Doran <bobtfish@bobtfish.net>
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2010 by Infinity Interactive, Inc.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
+
+=head1 CONTRIBUTORS
 
 =over 4
 
 =item *
 
-Tomas Doran <bobtfish@bobtfish.net>
+Dagfinn Ilmari Mannsåker <ilmari@ilmari.org>
 
 =item *
 
@@ -113,12 +127,5 @@ Florian Ragwitz <rafl@debian.org>
 Karen Etheridge <ether@cpan.org>
 
 =back
-
-=head1 COPYRIGHT AND LICENSE
-
-This software is copyright (c) 2010 by Infinity Interactive, Inc.
-
-This is free software; you can redistribute it and/or modify it under
-the same terms as the Perl 5 programming language system itself.
 
 =cut

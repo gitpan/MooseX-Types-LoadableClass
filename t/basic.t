@@ -4,6 +4,7 @@ use warnings;
 use lib 't/lib';
 
 use Test::More;
+use Test::Fatal;
 use Class::Load 'is_class_loaded';
 
 {
@@ -24,21 +25,53 @@ use Class::Load 'is_class_loaded';
     );
 }
 
-ok !is_class_loaded('FooBarTestClass');
-ok eval { MyClass->new(foobar_class => 'FooBarTestClass') };
-ok is_class_loaded('FooBarTestClass');
+ok(!is_class_loaded('FooBarTestClass'), 'class is not loaded');
+is(
+    exception { MyClass->new(foobar_class => 'FooBarTestClass') },
+    undef,
+    'LoadableClass validates',
+);
+ok(is_class_loaded('FooBarTestClass'), 'now class is loaded');
 
-ok !eval { MyClass->new(foobar_class => 'FooBarTestClassDoesNotExist') };
-ok $@;
+like(
+    exception { MyClass->new(foobar_class => 'FooBarTestClassDoesNotExist') },
+    qr/Validation failed/,
+    'LoadableClass does not validate with another class name',
+);
 
-ok !is_class_loaded('FooBarTestRole');
-ok eval { MyClass->new(foobar_role => 'FooBarTestRole') };
-ok is_class_loaded('FooBarTestRole');
+ok(!is_class_loaded('FooBarTestRole'), 'role is not loaded');
+is(
+    exception { MyClass->new(foobar_role => 'FooBarTestRole') },
+    undef,
+    'LoadableRole validates',
+);
+ok(is_class_loaded('FooBarTestRole'), 'now role is loaded');
 
-ok !eval { MyClass->new(foobar_role => 'FooBarTestClass') };
-ok $@;
+like(
+    exception { MyClass->new(foobar_role => 'FooBarTestClass') },
+    qr/Validation failed/,
+    'LoadableRole does not validate with another role name',
+);
 
-ok !eval { MyClass->new(foobar_role => 'FooBarTestRoleDoesNotExist') };
-ok $@;
+like(
+    exception { MyClass->new(foobar_role => 'FooBarTestRoleDoesNotExist') },
+    qr/Validation failed/,
+    'and again',
+);
+
+use MooseX::Types::LoadableClass qw/LoadableClass LoadableRole/;
+
+for my $name (qw(Non::Existent::Module ::Syntactically::Invalid::Name)) {
+    for my $tc (LoadableClass, LoadableRole) {
+        for (0..1)
+        {
+            is(
+                exception { ok(! $tc->check($name), $tc->name . ", $name: validation failed") },
+                undef,
+                $tc->name . ", $name: does not die"
+            );
+        }
+    }
+}
 
 done_testing;

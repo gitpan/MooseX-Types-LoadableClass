@@ -2,8 +2,7 @@ use strict;
 use warnings;
 
 use Test::More;
-use FindBin qw/ $Bin /;
-use lib "$Bin/lib";
+use lib 't/lib';
 
 use MooseX::Types::LoadableClass qw/ LoadableClass /;
 

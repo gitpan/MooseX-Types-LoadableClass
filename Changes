@@ -1,5 +1,9 @@
 Revision history for MooseX-Types-LoadableClass
 
+0.011     2013-10-02 01:36:29Z (Karen Etheridge)
+
+  - only try to load the class if it's a valid module name (ilmari)
+
 0.010     2013-09-07 21:37:31Z (Karen Etheridge)
   - avoid trying to load the class if already loaded (minor optimization)
   - repository moved to the github moose organization
