@@ -1,7 +1,7 @@
 
 
 This archive contains the distribution MooseX-Types-LoadableClass,
-version 0.011:
+version 0.012:
 
   ClassName type constraint with coercion to load the class.
 

@@ -3,9 +3,9 @@ BEGIN {
   $MooseX::Types::LoadableClass::AUTHORITY = 'cpan:BOBTFISH';
 }
 {
-  $MooseX::Types::LoadableClass::VERSION = '0.011';
+  $MooseX::Types::LoadableClass::VERSION = '0.012';
 }
-# git description: v0.010-9-g7dd9f6b
+# git description: v0.011-2-gb666a58
 
 # ABSTRACT: ClassName type constraint with coercion to load the class.
 use strict;
@@ -49,9 +49,9 @@ __END__
 
 =pod
 
-=encoding ISO-8859-1
+=encoding UTF-8
 
-=for :stopwords Tomas Doran Infinity Interactive, Inc Dagfinn Ilmari Mannsåker Florian
+=for :stopwords Tomas Doran Infinity Interactive, Inc Dagfinn Ilmari MannsÃ¥ker Florian
 Ragwitz Karen Etheridge ClassName
 
 =head1 NAME
@@ -60,7 +60,7 @@ MooseX::Types::LoadableClass - ClassName type constraint with coercion to load t
 
 =head1 VERSION
 
-version 0.011
+version 0.012
 
 =head1 SYNOPSIS
 
@@ -116,7 +116,7 @@ the same terms as the Perl 5 programming language system itself.
 
 =item *
 
-Dagfinn Ilmari Mannsåker <ilmari@ilmari.org>
+Dagfinn Ilmari MannsÃ¥ker <ilmari@ilmari.org>
 
 =item *
 

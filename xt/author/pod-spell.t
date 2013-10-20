@@ -18,7 +18,7 @@ Interactive
 Inc
 Dagfinn
 Ilmari
-Mannsåker
+MannsÃ¥ker
 ilmari
 Florian
 Ragwitz
