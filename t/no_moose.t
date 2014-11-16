@@ -10,8 +10,11 @@ use MooseX::Types::LoadableClass qw(LoadableClass LoadableRole);
 ok !is_class_loaded('FooBarTestClass');
 ok LoadableClass->check('FooBarTestClass');
 ok is_class_loaded('FooBarTestClass');
+ok(is_LoadableClass('FooBarTestClass'), 'is_LoadableClass');
+use namespace::clean -except => [qw/ import /];
 
 ok !LoadableClass->check('FooBarTestClassDoesNotExist');
+ok(!is_LoadableClass('FooBarTestClassDoesNotExist'));
 
 ok !is_class_loaded('FooBarTestRole');
 ok LoadableRole->check('FooBarTestRole');

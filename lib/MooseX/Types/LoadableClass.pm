@@ -1,27 +1,22 @@
 package MooseX::Types::LoadableClass;
-BEGIN {
-  $MooseX::Types::LoadableClass::AUTHORITY = 'cpan:BOBTFISH';
-}
-{
-  $MooseX::Types::LoadableClass::VERSION = '0.012';
-}
-# git description: v0.011-2-gb666a58
-
+# git description: v0.012-13-gcdaf68a
+$MooseX::Types::LoadableClass::VERSION = '0.013';
 # ABSTRACT: ClassName type constraint with coercion to load the class.
+# KEYWORDS: moose types constraints class classes role roles module modules
+
 use strict;
 use warnings;
 use MooseX::Types -declare => [qw/ ClassName LoadableClass LoadableRole /];
 use MooseX::Types::Moose qw(Str RoleName), ClassName => { -as => 'MooseClassName' };
 use Moose::Util::TypeConstraints;
-use Class::Load qw(is_class_loaded load_optional_class);
-use Module::Runtime qw(is_module_name);
-use namespace::autoclean;
+use Module::Runtime qw(is_module_name use_package_optimistically);
+use if MooseX::Types->VERSION >= 0.42, 'namespace::autoclean';
 
 subtype LoadableClass,
     as Str,
     where {
         is_module_name($_)
-            and is_class_loaded($_) || load_optional_class($_)
+            and use_package_optimistically($_)
             and MooseClassName->check($_)
     };
 
@@ -29,7 +24,7 @@ subtype LoadableRole,
     as Str,
     where {
         is_module_name($_)
-            and is_class_loaded($_) || load_optional_class($_)
+            and use_package_optimistically($_)
             and RoleName->check($_)
     };
 
@@ -51,16 +46,13 @@ __END__
 
 =encoding UTF-8
 
-=for :stopwords Tomas Doran Infinity Interactive, Inc Dagfinn Ilmari Mannsåker Florian
-Ragwitz Karen Etheridge ClassName
-
 =head1 NAME
 
 MooseX::Types::LoadableClass - ClassName type constraint with coercion to load the class.
 
 =head1 VERSION
 
-version 0.012
+version 0.013
 
 =head1 SYNOPSIS
 
@@ -89,6 +81,8 @@ a lot of places.
 
 Now I don't have to.
 
+=for stopwords ClassName
+
 =head1 TYPES EXPORTED
 
 =head2 C<LoadableClass>
@@ -112,7 +106,13 @@ the same terms as the Perl 5 programming language system itself.
 
 =head1 CONTRIBUTORS
 
+=for stopwords Karen Etheridge Dagfinn Ilmari Mannsåker Florian Ragwitz Сергей Романов
+
 =over 4
+
+=item *
+
+Karen Etheridge <ether@cpan.org>
 
 =item *
 
@@ -124,7 +124,7 @@ Florian Ragwitz <rafl@debian.org>
 
 =item *
 
-Karen Etheridge <ether@cpan.org>
+Сергей Романов <sromanov@cpan.org>
 
 =back
 
